@@ -80,10 +80,10 @@ void setup() {
   mesh.setDebugMsgTypes( ERROR | STARTUP );  // set before init() so that you can see startup messages
 
   mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT);
-  mesh.onReceive(&receivedCallback);
-  mesh.onNewConnection(&newConnectionCallback);
-  mesh.onChangedConnections(&changedConnectionCallback);
-  mesh.onNodeTimeAdjusted(&nodeTimeAdjustedCallback);
+  // mesh.onReceive(&receivedCallback);
+  // mesh.onNewConnection(&newConnectionCallback);
+  // mesh.onChangedConnections(&changedConnectionCallback);
+  // mesh.onNodeTimeAdjusted(&nodeTimeAdjustedCallback);
 
   userScheduler.addTask(taskSendMessage);
   taskSendMessage.enable();
