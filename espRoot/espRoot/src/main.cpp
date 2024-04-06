@@ -8,29 +8,31 @@
 #define   MESH_PASSWORD   "MESHpassword"
 #define   MESH_PORT       5555
 #define   LED             33
-#define   ss 5
-#define   rst 14
-#define   dio0 27
+#define   ss              5
+#define   rst             14
+#define   dio0            27
+
+//--------------------Queueu-----------------------------------------
+const int QueueElementSize = 20;
+QueueHandle_t QueueHandle;
+typedef struct{
+  volatile double temp;
+  volatile double hum;
+  volatile bool human;
+} message_t;
 
 int nodeNumber = 3;
 
-// //String outgoing;              // outgoing message
-// String LoRaData;
-
-//byte msgCount = 0;            // count of outgoing messages
-// byte localAddress = 0xBB;     // address of this device
-// byte destination = 0xFF;      // destination to send to
 volatile long lastSendTime = 0;        // last send time
-//int interval = 1000;          // interval between sends
 
 Preferences prf;
 String readings;
 Scheduler userScheduler; // to control your personal task
 painlessMesh  mesh;
 
-volatile bool human;
-volatile double temp;
-volatile double hum;
+// volatile bool human;
+// volatile double temp;
+// volatile double hum;
 volatile char cmd_buffer;
 
 // prototypes
@@ -42,13 +44,14 @@ void vLoRa_go(void * pvParameters);
 void loraSendMessage(String outgoing);
 void onReceive(int packetSize);
 
+
 //------------------------------------TASKS-------------------------------------------------------------
-Task taskSendMessage(TASK_SECOND/2, TASK_FOREVER, &sendMessage);
+Task taskSendMessage(TASK_SECOND, TASK_FOREVER, &sendMessage);
 
 TaskHandle_t LoRa_go;
 void vLoRa_go(void * pvParameters){
   (void)pvParameters;
-
+  // message_t tx_data;
   for (;;){
     if (xTaskGetTickCount() - lastSendTime > pdMS_TO_TICKS(2000)) {
       String message = "";   // send a message
@@ -58,11 +61,34 @@ void vLoRa_go(void * pvParameters){
       if (prf.getBool("ob") == true) 
         message += "Detected Obstacle"; 
       else message += "No obstacle"; 
-
+      // if(QueueHandle != NULL){
+      //   int ret = xQueueReceive(QueueHandle, &tx_data, 0);
+      //   //if(ret == pdPASS){
+      //     message += String(tx_data.temp,3);
+      //     message += String(tx_data.hum,3);
+      //     message += (tx_data.human == true)? "Detected Obstacle" : "No obstacle"; 
+      //     // The message was successfully received - send it back to Serial port and "Echo: "
+      //     // Serial.printf("Echo line of size %d: \"%s\"\n", message.line_length, message.line);
+      //     // The item is queued by copy, not by reference, so lets free the buffer after use.
+      //   // }else if(ret == pdFALSE){
+      //   //   Serial.println("The `TaskWriteToSerial` was unable to receive data from the Queue");
+      //   //}
+      // }ueueHandle != NULL){
+        // int ret = xQueueReceive(QueueHandle, &tx_data, 0);
+        // //if(ret == pdPASS){
+        //   message += String(tx_data.temp,3);
+        //   message += String(tx_data.hum,3);
+        //   message += (tx_data.human == true)? "Detected Obstacle" : "No obstacle"; 
+          // The message was successfully received - send it back to Serial port and "Echo: "
+          // Serial.printf("Echo line of size %d: \"%s\"\n", message.line_length, message.line);
+          // The item is queued by copy, not by reference, so lets free the buffer after use.
+        // }else if(ret == pdFALSE){
+        //   Serial.println("The `TaskWriteToSerial` was unable to receive data from the Queue");
+        //}
+      // }
       loraSendMessage(message);
-
       Serial.println("Sending " + message);
-      lastSendTime = xTaskGetTickCount();            // timestamp the message
+      lastSendTime = xTaskGetTickCount();            // timestamp the message    
     } 
     onReceive(LoRa.parsePacket());
   } 
@@ -91,18 +117,29 @@ void sendMessage () {
 void receivedCallback( uint32_t from, String &msg ) {
   Serial.printf("bridge: Received from %u msg=%s\n", from, msg.c_str());
   Serial.println();
+  message_t message;
   JSONVar myObject = JSON.parse(msg.c_str());
   int node = myObject["node"];
-  human = myObject["human"];
-  temp = myObject["temp"];
-  hum = myObject["hum"];
+  message.human = myObject["human"];
+  message.temp = myObject["temp"];
+  message.hum = myObject["hum"];
   
-  if (node == 1) prf.putBool("ob",human);
+  if (node == 1) prf.putBool("ob",message.human);
   else {
-    prf.putDouble("temp",temp);
-    prf.putDouble("hum",hum);
+    prf.putDouble("temp",message.temp);
+    prf.putDouble("hum",message.hum);
   } 
-}
+  // if(QueueHandle != NULL && uxQueueSpacesAvailable(QueueHandle) > 0){
+  //   int ret = xQueueSend(QueueHandle, (void*) &message, 0);
+  //   if(ret == pdTRUE){
+  //     // The message was successfully sent.
+  //   }else if(ret == errQUEUE_FULL){
+  //     // Since we are checking uxQueueSpacesAvailable this should not occur, however if more than one task should
+  //     //   write into the same queue it can fill-up between the test and actual send attempt
+  //     Serial.println("The `TaskReadFromSerial` was unable to send data into the Queue");
+  //   } // Queue send check
+  // }
+} 
 
 void newConnectionCallback(uint32_t nodeId) {
   // Serial.printf("New Connection, nodeId = %u\n", nodeId);
@@ -146,7 +183,8 @@ void setup() {
     while (true);                       // if failed, do nothing
   }
 
-  xTaskCreatePinnedToCore(vLoRa_go, "LoRa", 8192, NULL, 0, &LoRa_go, 0);
+  QueueHandle = xQueueCreate(QueueElementSize, sizeof(message_t));
+  xTaskCreatePinnedToCore(vLoRa_go, "LoRa", 1024, NULL, 0, &LoRa_go, 0);
   //xTaskCreate(vSaveEEP, "Save", 4096, NULL, 1, &SaveEEP);
 
   mesh.setDebugMsgTypes( ERROR | STARTUP );  // set before init() so that you can see startup messages
