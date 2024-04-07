@@ -84,7 +84,7 @@ void LoRa_sendMessage(String message) {
   LoRa_txMode();                        // set tx mode
   LoRa.beginPacket();                   // start packet
   LoRa.print(message);                  // add payload
-  LoRa.endPacket(true);                 // finish packet and send it
+  LoRa.endPacket();                 // finish packet and send it
 }
 
 void onReceive(int packetSize) {
