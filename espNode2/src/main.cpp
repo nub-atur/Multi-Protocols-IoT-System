@@ -128,7 +128,6 @@ void LCD_log(void){
   if(qCMD != NULL){
     int ret = xQueueReceive(qCMD, &data, portMAX_DELAY);
     if(ret == pdPASS){
-      digitalWrite(obsLED, data.obs ? HIGH : LOW);
       switch (data.cmd){
         case 1   : lcd.clear(); break;
         case 2   : lcd.setCursor(0,0); lcd.print("HUMIDITY: ");  lcd.print(hum); break;
@@ -164,13 +163,14 @@ void sendMessage () {
 }
 
 void receivedCallback( uint32_t from, String &msg ) {
-  Serial.printf("Received from %u msg=%s\n", from, msg.c_str());
+  // Serial.printf("Received from %u msg=%s\n", from, msg.c_str());
   myData taking;
   JSONVar myObject = JSON.parse(msg.c_str());
   int node = myObject["node"];
   taking.obs = myObject["human"];
   taking.cmd = myObject["cmd"];
 
+  digitalWrite(obsLED, taking.obs ? HIGH : LOW);
   if(qCMD != NULL && uxQueueSpacesAvailable(qCMD) > 0){
     int ret = xQueueSend(qCMD, (void*) &taking, 0);
     if(ret == pdTRUE){
