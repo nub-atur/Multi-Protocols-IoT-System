@@ -60,7 +60,7 @@ void vLoRa_go(void * pvParameters){
       message += " ";
       message += counter;
       counter++;
-      loraSendMessage(message);
+      loraSendMessage("message"); //test "message" data
       Serial.println("Sending " + message);
       lastSendTime = xTaskGetTickCount();            // timestamp the message    
     } 
@@ -158,7 +158,9 @@ void receivedCallback( uint32_t from, String &msg ) {
 void setup() {
   Serial.begin(115200);
   while (!Serial);
+
   pinMode(LED, OUTPUT);
+
   prf.begin("data");
 
   LoRa.setPins(ss, rst, dio0);          // init LoRa SPI
@@ -166,10 +168,11 @@ void setup() {
     Serial.println("LoRa init failed. Check your connections.");
     while (true);                       // if failed, do nothing
   }
+  // LoRa.setTxPower(18);
 
   QueueHandle = xQueueCreate(QueueElementSize, sizeof(message_t));                //-------------
-  xTaskCreate(vLoRa_go, "LoRa_go", 1024*3, NULL, 0, &LoRa_go);       //--init tasks  
-  // xTaskCreate(vLora_back, "LoRa_back", 1024*2, NULL, 1, &LoRa_back); //------------
+  xTaskCreate(vLoRa_go, "LoRa_go", 1024*3, NULL, 0, &LoRa_go);                    //--init tasks  
+  // xTaskCreate(vLora_back, "LoRa_back", 1024*2, NULL, 1, &LoRa_back);           //------------
 
   mesh.setDebugMsgTypes( ERROR | STARTUP );  // set before init() so that you can see startup messages
   mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT);
