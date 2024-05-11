@@ -14,7 +14,7 @@
 #define   dio0            26 // GPIO26 IRQ(Interrupt Request)
 
 //--------------------Queueu-----------------------------------------
-const int QueueElementSize = 20;
+// const int QueueElementSize = 20;
 QueueHandle_t QueueHandle;
 
 typedef struct{
@@ -24,9 +24,9 @@ typedef struct{
 } message_t;
 
 int nodeNumber = 3;
-byte msgCount = 0;            // count of outgoing messages
-byte localAddress = 0xBB;     // address of this device
-byte destination = 0xFF;      // destination to send to
+// byte msgCount = 0;            // count of outgoing messages
+// byte localAddress = 0xBB;     // address of this device
+// byte destination = 0xFF;      // destination to send to
 volatile long lastSendTime = 0;        // last send time
 
 Preferences prf;
@@ -48,24 +48,27 @@ Task taskSendMessage(TASK_SECOND, TASK_FOREVER, &sendMessage);
 TaskHandle_t LoRa_go;
 void vLoRa_go(void * pvParameters){
   (void)pvParameters;
-  uint8_t counter = 0; 
+  // uint8_t counter = 0; 
   for (;;){
-    if (xTaskGetTickCount() - lastSendTime > pdMS_TO_TICKS(2000)) {
+    if (xTaskGetTickCount() - lastSendTime > pdMS_TO_TICKS(4000)) {
       String message = "";   // send a message
       message += String(prf.getDouble("temp"),2);
       message += " ";
       message += String(prf.getDouble("hum"),2);
       message += " ";
-      message +=  (prf.getBool("ob") == true) ? "y" : "n"; 
+      message +=  (prf.getBool("ob") == true) ? "yes" : "no"; 
       message += " ";
-      message += counter;
-      counter++;
-      loraSendMessage("message"); //test "message" data
-      Serial.println("Sending " + message);
+      message += pdTICKS_TO_MS(xTaskGetTickCount())/1000;
+      // counter++;
+      loraSendMessage(message); //test "message" data
+      // Serial.println("Sending " + message);
+      // Serial.printf("\t%d\n", counter);
+      // if (counter == 5) counter = 0;
+
       lastSendTime = xTaskGetTickCount();            // timestamp the message    
     } 
     onReceive(LoRa.parsePacket());
-    vTaskDelay(500 / portTICK_PERIOD_MS);
+    vTaskDelay(200 / portTICK_PERIOD_MS);
   } 
 }
 
@@ -73,16 +76,17 @@ void loraSendMessage(String outgoing) {
   LoRa.beginPacket();                   // start packet
   LoRa.print(outgoing);                 // add payload
   LoRa.endPacket();                 // finish packet and send it       
-  msgCount++;    
+  // msgCount++;    
 }
 
 void onReceive(int packetSize) {
   if (packetSize == 0) return;
 
-  String incoming = "";
+  char incoming[32] = "";
 
   while (LoRa.available()) {
-    incoming += (char)LoRa.read();
+    char receivedChar = (char)LoRa.read();
+    strncat(incoming, &receivedChar, 1);
   }
   
   if(QueueHandle != NULL && uxQueueSpacesAvailable(QueueHandle) > 0){
@@ -96,26 +100,28 @@ void onReceive(int packetSize) {
     } // Queue send check
   }
 
-  Serial.println("Message: " + incoming);
+  Serial.println("Message: " + String(incoming));
   Serial.println("RSSI: " + String(LoRa.packetRssi()));
   Serial.println("Snr: " + String(LoRa.packetSnr()));
   Serial.println();
-  digitalWrite(LED, !digitalRead(LED));
 }
 
 //--------------------------Mesh received Callback----------------------------
 String getReadings () {
+  char cmd_buffer[32];
+  if(QueueHandle != NULL){
+    if(xQueueReceive(QueueHandle, &cmd_buffer, 50) == pdPASS){
+      Serial.println("boardcast command now...");
+    } else {
+      strcpy(cmd_buffer, "null");
+    //Serial.println("The `Mesh getReadings` was unable to receive data from the Queue");
+    }
+  } 
+
   JSONVar jsonReadings;
   jsonReadings["node"] = nodeNumber;
-
-  String cmd_buffer;
-  if(QueueHandle != NULL){
-    int ret = xQueueReceive(QueueHandle, &cmd_buffer, portMAX_DELAY);
-    if(ret == pdPASS){
-      jsonReadings["cmd"] = cmd_buffer;
-    }
-  } else jsonReadings["cmd"] = 0;
-
+  jsonReadings["cmd"] = String(cmd_buffer);
+  
   readings = JSON.stringify(jsonReadings);
   return readings;
 }
@@ -126,7 +132,7 @@ void sendMessage () {
 }
 
 void receivedCallback( uint32_t from, String &msg ) { 
-  // Serial.printf("bridge: Received from %u msg=%s\n", from, msg.c_str());
+  Serial.printf("bridge: Received from %u msg=%s\n", from, msg.c_str());
   // Serial.println();
   message_t message;
   JSONVar myObject = JSON.parse(msg.c_str());
@@ -143,21 +149,22 @@ void receivedCallback( uint32_t from, String &msg ) {
   } 
 } 
 
-// void newConnectionCallback(uint32_t nodeId) {
-//   // Serial.printf("New Connection, nodeId = %u\n", nodeId);
-// }
+void newConnectionCallback(uint32_t nodeId) {
+  // Serial.printf("New Connection, nodeId = %u\n", nodeId);
+}
 
-// void changedConnectionCallback() {
-//   // Serial.printf("Changed connections\n");
-// }
+void changedConnectionCallback() {
+  // Serial.printf("Changed connections\n");
+  digitalWrite(LED, !digitalRead(LED));
+}
 
-// void nodeTimeAdjustedCallback(int32_t offset) {
-//   // Serial.printf("Adjusted time %u. Offset = %d\n", mesh.getNodeTime(),offset);
-// }
+void nodeTimeAdjustedCallback(int32_t offset) {
+  // Serial.printf("Adjusted time %u. Offset = %d\n", mesh.getNodeTime(),offset);
+}
 
 void setup() {
   Serial.begin(115200);
-  while (!Serial);
+  // while (!Serial);
 
   pinMode(LED, OUTPUT);
 
@@ -168,17 +175,21 @@ void setup() {
     Serial.println("LoRa init failed. Check your connections.");
     while (true);                       // if failed, do nothing
   }
-  // LoRa.setTxPower(18);
-
-  QueueHandle = xQueueCreate(QueueElementSize, sizeof(message_t));                //-------------
-  xTaskCreate(vLoRa_go, "LoRa_go", 1024*3, NULL, 0, &LoRa_go);                    //--init tasks  
+  LoRa.setSpreadingFactor(7);
+  LoRa.setSyncWord(0x12);
+  LoRa.setSignalBandwidth(125000);
+  LoRa.setCodingRate4(5);
+  LoRa.setTxPower(17);
+  
+  QueueHandle = xQueueCreate(32, sizeof(char[32]));                                //-------------
+  xTaskCreate(vLoRa_go, "LoRa_go", 1024*3, NULL, 1, &LoRa_go);                    //--init tasks  
   // xTaskCreate(vLora_back, "LoRa_back", 1024*2, NULL, 1, &LoRa_back);           //------------
 
   mesh.setDebugMsgTypes( ERROR | STARTUP );  // set before init() so that you can see startup messages
   mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT);
   mesh.onReceive(&receivedCallback);
   // mesh.onNewConnection(&newConnectionCallback);
-  // mesh.onChangedConnections(&changedConnectionCallback);
+  mesh.onChangedConnections(&changedConnectionCallback);
   // mesh.onNodeTimeAdjusted(&nodeTimeAdjustedCallback);
 
   userScheduler.addTask(taskSendMessage);

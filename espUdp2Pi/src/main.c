@@ -9,7 +9,7 @@
 #include "mydata.h"
 #include <stdio.h>
 #include "main.h"
-#include "TIM_RTOS.h"
+// #include "TIM_RTOS.h"
 
 #include "driver/gpio.h"
 #include "driver/timer.h"
@@ -41,9 +41,9 @@
 #define INPUT_PIN GPIO_NUM_34
 
 #define PORT 8888
-#define HOST_IP_ADDR "192.168.1.4"
+#define HOST_IP_ADDR "192.168.1.18"
 static const char *TAG = "UDP SOCKET CLIENT";
-static const char *payload = "M";
+static const char *payload = "ImHere";
 
 //----------------------------SOME TASKS-------------------------------------------
 TaskHandle_t rainBow;
@@ -58,6 +58,8 @@ static void udp_client_task(void *pvParameters)
     char host_ip[] = HOST_IP_ADDR;
     int addr_family = 0;
     int ip_protocol = 0;
+    const char *payloadRes = "OK";
+    bool getCheckFlag = false;
 
     while (1) {
         struct sockaddr_in dest_addr;
@@ -81,15 +83,20 @@ static void udp_client_task(void *pvParameters)
 
         ESP_LOGI(TAG, "Socket created, sending to %s:%d", host_ip, PORT);
 
-        while (1) {
+        int err = sendto(sock, payload, strlen(payload), 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+        if (err < 0) {
+            ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
+        } else ESP_LOGI(TAG, "Message sent");
 
-            int err = sendto(sock, payload, strlen(payload), 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
-            if (err < 0) {
+        if (getCheckFlag) {
+            int e = sendto(sock, payloadRes, strlen(payloadRes), 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+            if (e < 0) {
                 ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
-                break;
-            }
-            ESP_LOGI(TAG, "Message sent");
+            } else ESP_LOGI(TAG, "Message sent");
+            getCheckFlag = false;
+        }
 
+        while (1) {
             struct sockaddr_storage source_addr; // Large enough for both IPv4 or IPv6
             socklen_t socklen = sizeof(source_addr);
             int len = recvfrom(sock, rx_buffer, sizeof(rx_buffer) - 1, 0, (struct sockaddr *)&source_addr, &socklen);
@@ -104,12 +111,13 @@ static void udp_client_task(void *pvParameters)
                 rx_buffer[len] = 0; // Null-terminate whatever we received and treat like a string
                 ESP_LOGI(TAG, "Received %d bytes from %s:", len, host_ip);
                 ESP_LOGI(TAG, "%s", rx_buffer);
+                getCheckFlag = true;
                 if (strncmp(rx_buffer, "OK: ", 4) == 0) {
                     ESP_LOGI(TAG, "Received expected message, reconnecting");
                     break;
                 }
             }
-            vTaskDelay(5000 / portTICK_PERIOD_MS);
+            vTaskDelay(2000 / portTICK_PERIOD_MS);
         }
 
         if (sock != -1) {
@@ -241,17 +249,20 @@ void app_main()
 {   
     esp_log_level_set("wifi_init", ESP_LOG_NONE);
     esp_log_level_set("gpio", ESP_LOG_NONE);
+    esp_log_level_set("cpu_start", ESP_LOG_NONE);
+    esp_log_level_set("boot", ESP_LOG_NONE);
+    esp_log_level_set("wifi", ESP_LOG_NONE);
 
     wifi_connection();
     vTaskDelay(5000 / portTICK_PERIOD_MS);
     
-    Init_TIM_RTOS();
+    // Init_TIM_RTOS();
 
     bitbang_initialize(pins);
 
     myQueue = xQueueCreate(QUEUE_LENGTH, ITEM_SIZE);
 
-    xTaskCreate(udp_client_task, "udp_client", 4096, NULL, 4, &UDP);
+    xTaskCreate(udp_client_task, "udp_client", 1024*6, NULL, 4, &UDP);
     xTaskCreate(vRainBow, "rainbow", 1024*3, NULL, 0, &rainBow);
     // xTaskCreate(vReadLM393, "read", 1024*3, NULL, 2, &readInput);
     // xTaskCreate(vFlop, "jumping", 1024*3, NULL, 1, &flop);
