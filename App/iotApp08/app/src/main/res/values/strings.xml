@@ -2,10 +2,13 @@
     <string name="app_name">iotApp08</string>
     <string name="mqtt_message">MQTT message from Pi</string>
     <string name="publishing">Publishing:</string>
-    <string name="update_now">update now</string>
+    <string name="update_now">update</string>
     <string name="pause">pause</string>
     <string name="hint">set commands</string>
     <string name="textview">Publish commands</string>
     <string name="button">Send</string>
     <string name="cmd">cmd</string>
+    <string name="textview4"><![CDATA[Temp&Hum Plot]]></string>
+    <string name="obstacle">Obstacle:</string>
+    <string name="snr">SNR and RSSI:</string>
 </resources>
