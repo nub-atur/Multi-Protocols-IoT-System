@@ -28,7 +28,10 @@ android {
     }
 }
 
-dependencies {
+dependencies{
+    implementation libs.multidex
+    implementation libs.graphview
+    implementation libs.figlib
     implementation libs.org.eclipse.paho.client.mqttv3
     implementation libs.appcompat
     implementation libs.material

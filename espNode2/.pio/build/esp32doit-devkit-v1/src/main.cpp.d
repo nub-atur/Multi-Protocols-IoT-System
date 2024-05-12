@@ -1,4 +1,4 @@
-.pio/build/esp32doit-devkit-v1/src/main.cpp.o: src/main.cpp \
+.pio/build/esp32doit-devkit-v1/src/main.cpp.o: src/main.cpp include/DHT.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp_arduino_version.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/freertos/include/freertos/FreeRTOS.h \
@@ -129,14 +129,15 @@
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/spi_flash/include/esp_spi_flash.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/spi_flash/include/esp_spi_flash_counters.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_hw_support/include/soc/esp32/spiram.h \
- lib/DHT_sensor_library/DHT.h lib/Painless_Mesh/src/painlessMesh.h \
- lib/Painless_Mesh/src/painlessTaskOptions.h \
- lib/Painless_Mesh/src/painlessmesh/configuration.hpp \
- lib/Painless_Mesh/src/painlessTaskOptions.h \
- lib/TaskScheduler/src/TaskSchedulerDeclarations.h \
- lib/ArduinoJson/src/ArduinoJson.h lib/ArduinoJson/src/ArduinoJson.hpp \
- lib/ArduinoJson/src/ArduinoJson/Configuration.hpp \
- lib/AsyncTCP/src/AsyncTCP.h \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessMesh.h \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessTaskOptions.h \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/configuration.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessTaskOptions.h \
+ .pio/libdeps/esp32doit-devkit-v1/TaskScheduler/src/TaskSchedulerDeclarations.h \
+ .pio/libdeps/esp32doit-devkit-v1/ArduinoJson/src/ArduinoJson.h \
+ .pio/libdeps/esp32doit-devkit-v1/ArduinoJson/src/ArduinoJson.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/ArduinoJson/src/ArduinoJson/Configuration.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/AsyncTCP/src/AsyncTCP.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/lwip/lwip/src/include/lwip/pbuf.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/lwip/lwip/src/include/lwip/opt.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/lwip/port/esp32/include/lwipopts.h \
@@ -198,39 +199,41 @@
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiUdp.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/cores/esp32/Udp.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/cores/esp32/cbuf.h \
- lib/Painless_Mesh/src/painlessMeshSTA.h \
- lib/Painless_Mesh/src/painlessmesh/mesh.hpp \
- lib/Painless_Mesh/src/painlessmesh/configuration.hpp \
- lib/Painless_Mesh/src/painlessmesh/connection.hpp \
- lib/Painless_Mesh/src/painlessmesh/buffer.hpp \
- lib/Painless_Mesh/src/painlessmesh/logger.hpp \
- lib/Painless_Mesh/src/painlessmesh/ntp.hpp \
- lib/Painless_Mesh/src/painlessmesh/callback.hpp \
- lib/Painless_Mesh/src/painlessmesh/protocol.hpp \
- lib/Painless_Mesh/src/painlessmesh/router.hpp \
- lib/Painless_Mesh/src/painlessmesh/layout.hpp \
- lib/Painless_Mesh/src/painlessmesh/plugin.hpp \
- lib/Painless_Mesh/src/painlessmesh/tcp.hpp \
- lib/Painless_Mesh/src/painlessmesh/ota.hpp \
- lib/Painless_Mesh/src/painlessmesh/base64.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessMeshSTA.h \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/mesh.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/configuration.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/connection.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/buffer.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/logger.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/ntp.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/callback.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/protocol.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/router.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/layout.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/plugin.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/tcp.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/ota.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/base64.hpp \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/libraries/SPIFFS/src/SPIFFS.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/libraries/FS/src/FS.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/libraries/Update/src/Update.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/cores/esp32/MD5Builder.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_rom/include/esp_rom_md5.h \
- lib/Painless_Mesh/src/arduino/wifi.hpp \
- lib/Painless_Mesh/src/painlessMeshSTA.h \
- lib/Painless_Mesh/src/painlessmesh/mesh.hpp \
- lib/Painless_Mesh/src/painlessmesh/ota.hpp \
- lib/Painless_Mesh/src/painlessmesh/buffer.hpp \
- lib/Painless_Mesh/src/painlessmesh/layout.hpp \
- lib/Painless_Mesh/src/painlessmesh/logger.hpp \
- lib/Painless_Mesh/src/painlessmesh/ntp.hpp \
- lib/Painless_Mesh/src/painlessmesh/plugin.hpp \
- lib/Painless_Mesh/src/painlessmesh/protocol.hpp \
- lib/Painless_Mesh/src/painlessmesh/router.hpp \
- lib/Painless_Mesh/src/painlessmesh/tcp.hpp \
- lib/Arduino_JSON/src/Arduino_JSON.h lib/Arduino_JSON/src/JSON.h \
- lib/Arduino_JSON/src/JSONVar.h lib/LiquidCrystal_I2C/LiquidCrystal_I2C.h \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/arduino/wifi.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessMeshSTA.h \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/mesh.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/ota.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/buffer.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/layout.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/logger.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/ntp.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/plugin.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/protocol.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/router.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/painlessMesh/src/painlessmesh/tcp.hpp \
+ .pio/libdeps/esp32doit-devkit-v1/Arduino_JSON/src/Arduino_JSON.h \
+ .pio/libdeps/esp32doit-devkit-v1/Arduino_JSON/src/JSON.h \
+ .pio/libdeps/esp32doit-devkit-v1/Arduino_JSON/src/JSONVar.h \
+ include/LiquidCrystal_I2C.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src/Wire.h \
  C:/Users/mediv/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp32-hal.h

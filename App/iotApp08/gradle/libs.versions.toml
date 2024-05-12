@@ -1,15 +1,23 @@
 [versions]
-agp = "8.3.0"
+agp = "8.3.2"
+androidplotCore = "1.5.10"
+figlib = "1.0.11"
+graphview = "4.2.2"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.6.1"
 material = "1.11.0"
-activity = "1.8.0"
+activity = "1.9.0"
 constraintlayout = "2.1.4"
-orgEclipsePahoClientMqttv3 = "1.2.0"
+mpandroidchart = "v3.1.0"
+multidex = "1.0.3"
+orgEclipsePahoClientMqttv3 = "1.2.5"
 
 [libraries]
+androidplot-core = { module = "com.androidplot:androidplot-core", version.ref = "androidplotCore" }
+figlib = { module = "com.halfhp.fig:figlib", version.ref = "figlib" }
+graphview = { module = "com.jjoe64:graphview", version.ref = "graphview" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -17,6 +25,7 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+multidex = { module = "com.android.support:multidex", version.ref = "multidex" }
 org-eclipse-paho-client-mqttv3 = { module = "org.eclipse.paho:org.eclipse.paho.client.mqttv3", version.ref = "orgEclipsePahoClientMqttv3" }
 
 [plugins]
