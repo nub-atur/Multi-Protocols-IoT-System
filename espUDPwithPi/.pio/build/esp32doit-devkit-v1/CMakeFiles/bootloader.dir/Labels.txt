@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+F:/multiProtocol-IoT/espUDPwithPi/.pio/build/esp32doit-devkit-v1/CMakeFiles/bootloader
+F:/multiProtocol-IoT/espUDPwithPi/.pio/build/esp32doit-devkit-v1/CMakeFiles/bootloader.rule
+F:/multiProtocol-IoT/espUDPwithPi/.pio/build/esp32doit-devkit-v1/CMakeFiles/bootloader-complete.rule
+F:/multiProtocol-IoT/espUDPwithPi/.pio/build/esp32doit-devkit-v1/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+F:/multiProtocol-IoT/espUDPwithPi/.pio/build/esp32doit-devkit-v1/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+F:/multiProtocol-IoT/espUDPwithPi/.pio/build/esp32doit-devkit-v1/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+F:/multiProtocol-IoT/espUDPwithPi/.pio/build/esp32doit-devkit-v1/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+F:/multiProtocol-IoT/espUDPwithPi/.pio/build/esp32doit-devkit-v1/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+F:/multiProtocol-IoT/espUDPwithPi/.pio/build/esp32doit-devkit-v1/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+F:/multiProtocol-IoT/espUDPwithPi/.pio/build/esp32doit-devkit-v1/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
