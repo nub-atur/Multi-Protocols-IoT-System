@@ -1,5 +1,6 @@
 ﻿# Multi-Protocols-IoT-System
 
+## Description
 This repository collects the basic functionalities of using various protocols to build an IoT system aimed at handling multiple protocols with long distance, speed, and intelligence. It includes:
 
 - A mesh of three ESP32 nodes programmed using the Arduino framework, with the main library being 'painlessMesh'. One node serves as the root and establishes connections between the sx1278 and ESP32, aiming to achieve full-duplex communication in a peer-to-peer connection. Another node functions as a send-only node integrated with an IR sensor for obstacle detection. The last node handles received commands, drives an LCD 1602 (PCF85 I2C), and sends DHT22 sensor data. The root node receives data from the Raspberry Pi and broadcasts messages to the target nodes.
@@ -14,3 +15,5 @@ In the hardware realm, coding involves multitasking (ESP32, FreeRTOS) and multit
 
 In the future, BLE, HTTP(S), etc., will be added.
 ![image](https://github.com/nub-atur/Multi-Protocols-IoT-System/assets/136115054/08b8e104-b8f8-4c94-a86c-dc47328b1c97)
+
+
