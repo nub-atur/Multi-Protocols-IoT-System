@@ -1,6 +1,6 @@
 USAGE**********************
 -> copy this file to your Pi
--> pip3 install pySX127x
+-> pip3 install pyLoRa
 -> pip3 install paho-mqtt
 -> python main.py
 ********************************
