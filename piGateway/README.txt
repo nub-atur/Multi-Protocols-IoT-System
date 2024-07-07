@@ -1,5 +1,7 @@
 USAGE**********************
 -> copy this file to your Pi
+-> pip3 install spidev
+-> pip3 install RPi.GPIO
 -> pip3 install pyLoRa
 -> pip3 install paho-mqtt
 -> python main.py
