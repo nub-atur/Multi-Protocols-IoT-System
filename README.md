@@ -11,9 +11,8 @@ This repository collects the basic functionalities of using various protocols to
 
 - An app integrated MQTT connection with the server, built on the Android Studio IDE, using the Java language. For now, it can send a string to the IoT system and monitor all sensor data from it.
     
-In the hardware realm, coding involves multitasking (ESP32, FreeRTOS) and multithreading (Pi, multithread).
+future .. BLE, HTTP(S), Home Assistant OS
 
-In the future, BLE, HTTP(S), etc., will be added.
 ![image](https://github.com/nub-atur/Multi-Protocols-IoT-System/assets/136115054/08b8e104-b8f8-4c94-a86c-dc47328b1c97)
 
 
