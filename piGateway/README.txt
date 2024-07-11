@@ -301,7 +301,7 @@ if __name__ == '__main__':
     toMesh_queue = queue.Queue()
 
     # Configuration for MQTT
-    mqtt_broker = 'karolineserver.duckdns.org'
+    mqtt_broker = 'broker address'
     mqtt_port = 1883
     mqtt_topic = "KA/fromPi"
     mqtt_topicRE = "KA/fromApp"
