@@ -1,7 +1,7 @@
 ﻿# Multi-Protocols-IoT-System
 
 ## Description
-This repository collects the basic functionalities of using various protocols to build an IoT system aimed at handling multiple protocols with long distance, speed, and intelligence. It includes:
+This repository collects the basic functionalities of using various protocols to build an basic IoT system
 
 - A mesh of three ESP32 nodes programmed using the Arduino framework, with the main library being 'painlessMesh'. One node serves as the root and establishes connections between the sx1278 and ESP32, aiming to achieve full-duplex communication in a peer-to-peer connection. Another node functions as a send-only node integrated with an IR sensor for obstacle detection. The last node handles received commands, drives an LCD 1602 (PCF85 I2C), and sends DHT22 sensor data. The root node receives data from the Raspberry Pi and broadcasts messages to the target nodes.
 
